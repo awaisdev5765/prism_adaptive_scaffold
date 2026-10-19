@@ -32,9 +32,21 @@ class _DemoPageState extends State<DemoPage> {
   int _index = 0;
 
   static const _destinations = [
-    AdaptiveDestination(icon: Icons.inbox_outlined, selectedIcon: Icons.inbox, label: 'Inbox'),
-    AdaptiveDestination(icon: Icons.star_outlined, selectedIcon: Icons.star, label: 'Starred'),
-    AdaptiveDestination(icon: Icons.send_outlined, selectedIcon: Icons.send, label: 'Sent'),
+    AdaptiveDestination(
+      icon: Icons.inbox_outlined,
+      selectedIcon: Icons.inbox,
+      label: 'Inbox',
+    ),
+    AdaptiveDestination(
+      icon: Icons.star_outlined,
+      selectedIcon: Icons.star,
+      label: 'Starred',
+    ),
+    AdaptiveDestination(
+      icon: Icons.send_outlined,
+      selectedIcon: Icons.send,
+      label: 'Sent',
+    ),
   ];
 
   @override

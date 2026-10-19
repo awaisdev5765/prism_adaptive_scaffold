@@ -109,8 +109,8 @@ class PrismAdaptiveScaffold extends StatelessWidget {
     BuildContext context,
     List<NavigationRailDestination> railDestinations,
   ) {
-    final labelBehavior = bottomNavLabelType ??
-        NavigationDestinationLabelBehavior.alwaysShow;
+    final labelBehavior =
+        bottomNavLabelType ?? NavigationDestinationLabelBehavior.alwaysShow;
     return Scaffold(
       appBar: appBar,
       backgroundColor: backgroundColor,
@@ -170,11 +170,7 @@ class PrismAdaptiveScaffold extends StatelessWidget {
       floatingActionButton: floatingActionButton,
       body: Row(
         children: [
-          _buildRail(
-            context,
-            railDestinations,
-            extended: useExtendedRail,
-          ),
+          _buildRail(context, railDestinations, extended: useExtendedRail),
           Expanded(
             child: _AnimatedBody(
               index: currentIndex,
@@ -199,7 +195,8 @@ class PrismAdaptiveScaffold extends StatelessWidget {
         return NavigationRail(
           selectedIndex: currentIndex,
           onDestinationSelected: onDestinationSelected,
-          extended: extended && railWidth == null && constraints.maxWidth >= 840,
+          extended:
+              extended && railWidth == null && constraints.maxWidth >= 840,
           labelType: extended
               ? NavigationRailLabelType.none
               : (railLabelType ?? NavigationRailLabelType.selected),
@@ -250,10 +247,7 @@ class _AnimatedBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
       duration: duration,
-      child: KeyedSubtree(
-        key: ValueKey(index),
-        child: builder(index),
-      ),
+      child: KeyedSubtree(key: ValueKey(index), child: builder(index)),
     );
   }
 }

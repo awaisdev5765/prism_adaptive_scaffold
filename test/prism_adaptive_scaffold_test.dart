@@ -50,12 +50,11 @@ void main() {
     });
 
     test('equality is value-based', () {
+      expect(const PrismBreakpoint(600), const PrismBreakpoint(600));
       expect(
-        const PrismBreakpoint(600),
-        const PrismBreakpoint(600),
+        PrismBreakpoint.medium.isSameClass(PrismBreakpoint.medium),
+        isTrue,
       );
-      expect(PrismBreakpoint.medium.isSameClass(PrismBreakpoint.medium),
-          isTrue);
     });
   });
 
@@ -67,8 +66,7 @@ void main() {
       expect(find.text('Page 0'), findsOneWidget);
     });
 
-    testWidgets('medium shows navigation rail without labels',
-        (tester) async {
+    testWidgets('medium shows navigation rail without labels', (tester) async {
       await _pumpScaffold(tester, size: const Size(700, 800));
       expect(find.byType(NavigationRail), findsOneWidget);
       expect(find.byType(NavigationBar), findsNothing);

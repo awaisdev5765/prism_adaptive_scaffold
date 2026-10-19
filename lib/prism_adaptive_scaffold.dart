@@ -5,5 +5,6 @@
 /// iOS, macOS, Windows, Linux, and web.
 library;
 
-export 'src/adaptive_scaffold.dart' show AdaptiveDestination, PrismAdaptiveScaffold;
+export 'src/adaptive_scaffold.dart'
+    show AdaptiveDestination, PrismAdaptiveScaffold;
 export 'src/breakpoint.dart' show PrismBreakpoint;
