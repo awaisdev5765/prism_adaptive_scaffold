@@ -22,10 +22,9 @@ void main() {
     }
     if (!dir.existsSync()) return;
     final families = <String, List<Uint8List>>{};
-    for (final file in dir
-        .listSync()
-        .whereType<File>()
-        .where((f) => f.path.endsWith('.ttf'))) {
+    for (final file in dir.listSync().whereType<File>().where(
+      (f) => f.path.endsWith('.ttf'),
+    )) {
       final name = file.uri.pathSegments.last.replaceAll('.ttf', '');
       final family = name.startsWith('RobotoMono')
           ? 'monospace'
@@ -39,22 +38,25 @@ void main() {
       }
       await loader.load();
     }
-    final flutterRoot = File(Platform.resolvedExecutable)
-        .parent
-        .parent
-        .parent
-        .parent
-        .parent
-        .path;
-    final iconFont = File(
-      '$flutterRoot/bin/cache/artifacts/material_fonts/'
-      'MaterialIcons-Regular.otf',
-    );
-    if (iconFont.existsSync()) {
+    // Walk up from the test runner binary to find the Flutter SDK's icon
+    // font — the exact depth varies between flutter/dart launch paths.
+    var sdkDir = File(Platform.resolvedExecutable).parent;
+    File? iconFont;
+    for (var i = 0; i < 8; i++) {
+      final candidate = File(
+        '${sdkDir.path}/bin/cache/artifacts/material_fonts/'
+        'MaterialIcons-Regular.otf',
+      );
+      if (candidate.existsSync()) {
+        iconFont = candidate;
+        break;
+      }
+      sdkDir = sdkDir.parent;
+    }
+    final resolved = iconFont;
+    if (resolved != null) {
       final loader = FontLoader('MaterialIcons')
-        ..addFont(
-          Future.value(iconFont.readAsBytesSync().buffer.asByteData()),
-        );
+        ..addFont(Future.value(resolved.readAsBytesSync().buffer.asByteData()));
       await loader.load();
     }
   }
@@ -66,7 +68,7 @@ void main() {
     String path,
   ) async {
     tester.view.physicalSize = size;
-    tester.view.devicePixelRatio = 2.0;
+    tester.view.devicePixelRatio = 1.0;
     await tester.pumpAndSettle();
     await tester.runAsync(() async {
       final boundary = tester.renderObject<RenderRepaintBoundary>(
@@ -87,35 +89,38 @@ void main() {
 
       // Desktop: extended rail.
       tester.view.physicalSize = const Size(1100, 800);
-      tester.view.devicePixelRatio = 2.0;
+      tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.reset);
       await tester.pumpWidget(
-        RepaintBoundary(
-          key: desktopKey,
-          child: PrismAdaptiveScaffold(
-            destinations: const [
-              AdaptiveDestination(
-                icon: Icons.inbox_outlined,
-                selectedIcon: Icons.inbox,
-                label: 'Inbox',
+        MaterialApp(
+          theme: ThemeData(useMaterial3: true, fontFamily: 'Roboto'),
+          home: RepaintBoundary(
+            key: desktopKey,
+            child: PrismAdaptiveScaffold(
+              destinations: const [
+                AdaptiveDestination(
+                  icon: Icons.inbox_outlined,
+                  selectedIcon: Icons.inbox,
+                  label: 'Inbox',
+                ),
+                AdaptiveDestination(
+                  icon: Icons.send_outlined,
+                  selectedIcon: Icons.send,
+                  label: 'Sent',
+                ),
+              ],
+              currentIndex: 0,
+              appBar: AppBar(
+                centerTitle: true,
+                title: const Text('prism_adaptive_scaffold'),
               ),
-              AdaptiveDestination(
-                icon: Icons.send_outlined,
-                selectedIcon: Icons.send,
-                label: 'Sent',
-              ),
-            ],
-            currentIndex: 0,
-            appBar: AppBar(
-              centerTitle: true,
-              title: const Text('prism_adaptive_scaffold'),
-            ),
-            bodyBuilder: (index) => Center(
-              child: Text(
-                'Page $index',
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+              bodyBuilder: (index) => Center(
+                child: Text(
+                  'Page $index',
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
@@ -132,32 +137,35 @@ void main() {
       // Phone: bottom navigation bar.
       tester.view.physicalSize = const Size(400, 800);
       await tester.pumpWidget(
-        RepaintBoundary(
-          key: mobileKey,
-          child: PrismAdaptiveScaffold(
-            destinations: const [
-              AdaptiveDestination(
-                icon: Icons.inbox_outlined,
-                selectedIcon: Icons.inbox,
-                label: 'Inbox',
+        MaterialApp(
+          theme: ThemeData(useMaterial3: true, fontFamily: 'Roboto'),
+          home: RepaintBoundary(
+            key: mobileKey,
+            child: PrismAdaptiveScaffold(
+              destinations: const [
+                AdaptiveDestination(
+                  icon: Icons.inbox_outlined,
+                  selectedIcon: Icons.inbox,
+                  label: 'Inbox',
+                ),
+                AdaptiveDestination(
+                  icon: Icons.send_outlined,
+                  selectedIcon: Icons.send,
+                  label: 'Sent',
+                ),
+              ],
+              currentIndex: 1,
+              appBar: AppBar(
+                centerTitle: true,
+                title: const Text('prism_adaptive_scaffold'),
               ),
-              AdaptiveDestination(
-                icon: Icons.send_outlined,
-                selectedIcon: Icons.send,
-                label: 'Sent',
-              ),
-            ],
-            currentIndex: 1,
-            appBar: AppBar(
-              centerTitle: true,
-              title: const Text('prism_adaptive_scaffold'),
-            ),
-            bodyBuilder: (index) => Center(
-              child: Text(
-                'Page $index',
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+              bodyBuilder: (index) => Center(
+                child: Text(
+                  'Page $index',
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
