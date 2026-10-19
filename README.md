@@ -63,6 +63,13 @@ Part of a cohesive adaptive-UI suite — pair the scaffold with adaptive dialogs
 
 All pure Flutter, all six platforms, MIT licensed, built to work together.
 
+## Screenshots
+
+<p align="center">
+  <img src="doc/screenshot.png" alt="Desktop: extended navigation rail" width="420">
+  <img src="doc/screenshot_mobile.png" alt="Phone: bottom navigation bar" width="180">
+</p>
+
 ## License
 
 MIT — see [LICENSE](LICENSE).
